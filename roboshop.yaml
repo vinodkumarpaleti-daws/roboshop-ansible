@@ -5,6 +5,7 @@
   vars:
     sg_id: sgr-08d7aa13749cd50a2       # get the id from AWS
     ami_id: ami-0220d79f3f480ecf5   # get the id from AWS
+    env:  "dev"
     instances:    # Give the list of instances
       - mongodb
       - catalogue
@@ -15,4 +16,9 @@
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
         name: "{{ item }}"
+      tags:
+        Project: "roboshop"
+        Name: "{{ item }}-{{ env }}"
+        Component: "{{ item }}"
+        Environment: "{{ item }}-{{ env }}"
       loop: "{{ instances }}"
