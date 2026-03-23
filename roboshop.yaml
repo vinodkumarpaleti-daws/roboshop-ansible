@@ -1,28 +1,27 @@
-- name: create ec2 instance and r53 records
+- name: create ec2 and r53 records
   hosts: all
   connection: local
-  become: yes
-
   vars:
-    sg_id: sg-08d7aa13749cd50a2
+    sg_id: sg-00329eaa2a9c24c6f
     ami_id: ami-0220d79f3f480ecf5
-    region: us-east-1
-    env: "dev"
+   # domain_name: daws88s.online
+    env: dev
+    action: create
     instances:
       - mongodb
       - catalogue
-
   tasks:
-    - name: create ec2 instances
+    ### CREATE ###
+    - name: create ec2 instance
       amazon.aws.ec2_instance:
-        region: "{{ region }}"
         instance_type: "t3.micro"
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
         name: "{{ item }}-{{ env }}"
         tags:
           Project: roboshop
-          Name: "{{ item }}-{{ env }}"
           Component: "{{ item }}"
           Environment: "{{ env }}"
+          Name: "{{ item }}-{{ env }}"
       loop: "{{ instances }}"
+     # register: ec2_output
