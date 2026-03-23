@@ -6,7 +6,7 @@
     ami_id: ami-0220d79f3f480ecf5
    # domain_name: daws88s.online
     env: dev
-    action: create
+   # action: create
     instances:
       - mongodb
       - catalogue
