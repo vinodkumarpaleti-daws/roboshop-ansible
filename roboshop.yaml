@@ -16,9 +16,9 @@
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
         name: "{{ item }}"
-      tags:
-        Project: "roboshop"
-        Name: "{{ item }}-{{ env }}"
-        Component: "{{ item }}"
-        Environment: "{{ item }}-{{ env }}"
+        tags:
+          Project: "roboshop"
+          Name: "{{ item }}-{{ env }}"
+          Component: "{{ item }}"
+          Environment: "{{ item }}-{{ env }}"
       loop: "{{ instances }}"
