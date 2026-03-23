@@ -4,7 +4,7 @@
   vars:
     sg_id: sg-00329eaa2a9c24c6f
     ami_id: ami-0220d79f3f480ecf5
-   # domain_name: daws88s.online
+    domain_name: jcglobalit.online
     env: dev
    # action: create
     instances:
@@ -29,3 +29,17 @@
     - name: Print the ec2_output
       ansible.builtin.debug:
         msg: "{{ ec2_output }}"
+
+    - name: Create route53 records
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "{{ item.item }}-{{ env }}.{{ domain_name }}" # ex: mongodb-dev.jcglobalit.online
+        # In the record it will read from ec2_output file and creates the r53 record
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].private_ip_address }}"
+        wait: true
+      loop: "{{ ec2_output.results }}"
+
+
