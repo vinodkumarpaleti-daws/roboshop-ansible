@@ -40,6 +40,18 @@
         ttl: 1
         value: "{{ item.instances[0].private_ip_address }}"
         wait: true
+      loop: "{{ ec2_output.results }}"  # It will read the ec2_output.json file's results block and the results block
+
+    - name: Create route53 record for frontend
+      amazon.aws.route53:
+        state: present
+        zone: "{{ domain_name }}"
+        record: "roboshop-{{ env }}.{{ doman_name }}"   # roboshop-dev.jcglobalit.online
+        type: A
+        ttl: 1
+        value: "{{ item.instances[0].public_ip_address }}"
+        wait: true
       loop: "{{ ec2_output.results }}"
+      when: item.item == "frontend"
 
 
