@@ -6,7 +6,7 @@
     ami_id: ami-0220d79f3f480ecf5
     domain_name: jcglobalit.online
     env: dev
-   # action: create
+    action: create
     instances:
       - mongodb
       - catalogue
@@ -25,10 +25,12 @@
           Name: "{{ item }}-{{ env }}"
       loop: "{{ instances }}"
       register: ec2_output
+      when: action == "create"
 
     - name: Print the ec2_output
       ansible.builtin.debug:
         msg: "{{ ec2_output }}"
+      when: action == "create"
 
     - name: Create route53 records
       amazon.aws.route53:
@@ -41,6 +43,7 @@
         value: "{{ item.instances[0].private_ip_address }}"
         wait: true
       loop: "{{ ec2_output.results }}"  # It will read the ec2_output.json file's results block and the results block
+      when: action == "create"
 
     - name: Create route53 record for frontend
       amazon.aws.route53:
@@ -52,6 +55,40 @@
         value: "{{ item.instances[0].public_ip_address }}"
         wait: true
       loop: "{{ ec2_output.results }}"
-      when: item.item == "frontend"
+      when:
+      - item.item == "frontend"
+      - action == "create"
+
+    ### DESTROY ###
+
+    - name: delete r53 records for frontend
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ domain_name }}"
+        record: "roboshop-{{ env }}.{{ domain_name }}" # roboshop-dev.jcglobalit.online
+        type: A
+        ttl: 1
+      loop: "{{ instances }}"
+      when: # and
+        - item == "frontend"
+        - action == "destroy"
+
+    - name: delete r53 records
+      amazon.aws.route53:
+        state: absent
+        zone: "{{ domain_name }}"
+        record: "{{ item }}-{{ env }}.{{ domain_name }}" # roboshop-dev.jcglobalit.online
+        type: A
+        ttl: 1
+      loop: "{{ instances }}"
+      when: action == "destroy"
+
+    - name: delete ec2 instance
+      amazon.aws.ec2_instance:
+        state: absent
+        name: "{{ item }}-{{ env }}"
+        wait: false
+      loop: "{{ instances }}"
+      when: action == "destroy"
 
 
