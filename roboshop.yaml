@@ -44,6 +44,7 @@
         ttl: 1
         value: "{{ item.instances[0].private_ip_address }}"
         wait: true
+        overwrite: true # It will remove or overwrite the existing records
       loop: "{{ ec2_output.results }}"  # It will read the ec2_output.json file's results block and the results block
       when: action == "create"
 
@@ -56,6 +57,7 @@
         ttl: 1
         value: "{{ item.instances[0].public_ip_address }}"
         wait: true
+        overwrite: true
       loop: "{{ ec2_output.results }}"
       when:
       - item.item == "frontend"
