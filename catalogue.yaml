@@ -51,7 +51,7 @@
     - name: copy catalogue service file to the catalogue server
       ansible.builtin.copy:
         src: catalogue.service
-        dest: /etc/ststemd/system/catalogue.service
+        dest: /etc/systemd/system/catalogue.service
 
     - name: install mongodb client
       ansible.builtin.dnf:
