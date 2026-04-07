@@ -37,3 +37,9 @@ ex: ansible-playbook -i inventory.ini mongodb.yaml
 ```agsl
 ex: curl http://catalogue-dev.jcglobalit.online:8080/health
 ```
+
+***Check the state of the database server(mysql. redis, rabbitmq, mongodb) after installation***
+```agsl
+syn: telnet <server-name or IP> <port-number>
+ex:  telnet mysql-dev.jcglobalit.online 3306
+```

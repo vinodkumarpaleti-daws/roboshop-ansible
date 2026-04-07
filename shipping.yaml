@@ -21,6 +21,11 @@
     - name: Delete App directory    #This will delete 'app' directory if already exists
       ansible.builtin.file:
         path: /app
+        state: absent
+
+    - name: Create App directory
+      ansible.builtin.file:
+        path: /app
         state: directory
 
     - name: Delete shipping zip file  #This will delete '/tmp/shipping.zip' directory if already exists.
