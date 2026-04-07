@@ -1,8 +1,8 @@
-- name: Configure Shipping Server
+- name: configure shipping server
   hosts: shipping
   become: yes
   tasks:
-    - name: Install Maven & Mysql
+    - name: install maven and mysql
       ansible.builtin.dnf:
         name: "{{ item }}"
         state: present
@@ -10,7 +10,7 @@
         - maven
         - mysql
 
-    - name: Create system user for roboshop
+    - name: create system user roboshop
       ansible.builtin.user:
         name: roboshop
         system: true
@@ -18,27 +18,27 @@
         shell: /sbin/nologin
         comment: "Roboshop system user"
 
-    - name: Delete App directory    #This will delete 'app' directory if already exists
+    - name: delete app directory
       ansible.builtin.file:
         path: /app
         state: absent
 
-    - name: Create App directory
+    - name: create app directory
       ansible.builtin.file:
         path: /app
         state: directory
 
-    - name: Delete shipping zip file  #This will delete '/tmp/shipping.zip' directory if already exists.
+    - name: delete shipping zip file
       ansible.builtin.file:
         path: /tmp/shipping.zip
         state: absent
 
-    - name: Download the shipping code
+    - name: download shipping
       ansible.builtin.get_url:
         url: https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip
         dest: /tmp/shipping.zip
 
-    - name: unarchive shipping code
+    - name: unarchieve shipping
       ansible.builtin.unarchive:
         src: /tmp/shipping.zip
         dest: /app
@@ -49,8 +49,13 @@
       args:
         chdir: /app
 
+    - name: install dependencies
+      ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+      args:
+        chdir: /app
+
     - name: create systemctl service
-      ansible.builtin.template:   # template module will override the variable values
+      ansible.builtin.template:
         src: shipping.service
         dest: /etc/systemd/system/shipping.service
 
