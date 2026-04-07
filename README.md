@@ -16,9 +16,14 @@ pip3 install boto3 botocore
 **command to create the instances and r53 records using ansible (roboshop.yaml) if we are not defining the action by default it will create action**
 
 ```agsl
-ansible-playbook -i localhost,   -e '{"instances":["mongodb","catalogue","redis","user","cart","mysql","shipping","rabbitmq","payment","frontend"]}'  -e action=create roboshop.yaml
+ansible-playbook -i localhost, -e '{"instances":["mongodb","catalogue","redis","user","cart","mysql","shipping","rabbitmq","payment","frontend"]}'  -e action=create roboshop.yaml
 ```
 **command to delete the instances and r53 records using ansible (roboshop.yaml)**
 ```agsl
-ansible-playbook -i localhost,   -e '{"instances":["mongodb","catalogue","redis","user","cart","mysql","shipping","rabbitmq","payment","frontend"]}'  -e action=destroy roboshop.yaml
+ansible-playbook -i localhost, -e '{"instances":["mongodb","catalogue","redis","user","cart","mysql","shipping","rabbitmq","payment","frontend"]}'  -e action=destroy roboshop.yaml
+```
+## OR
+
+```agsl
+ansible-playbook -i localhost, -e "instances=['mongodb','catalogue','redis','user','cart','mysql','shipping','rabbitmq','payment','frontend']" roboshop.yaml
 ```
