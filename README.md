@@ -27,3 +27,13 @@ ansible-playbook -i localhost, -e '{"instances":["mongodb","catalogue","redis","
 ```agsl
 ansible-playbook -i localhost, -e "instances=['mongodb','catalogue','redis','user','cart','mysql','shipping','rabbitmq','payment','frontend']" roboshop.yaml
 ```
+
+***To run the playbook***
+```agsl
+ex: ansible-playbook -i inventory.ini mongodb.yaml
+```
+
+***check the health of the application or server from the Ansible server***
+```agsl
+ex: curl http://catalogue-dev.jcglobalit.online:8080/health
+```
