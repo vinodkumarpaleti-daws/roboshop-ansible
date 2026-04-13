@@ -3,6 +3,11 @@
 **This repo contains roboshop ansible configuration**
 
 **Dependencies to for ansible to run aws modules**
+
+**Install ansible in the server**
+```agsl
+sudo dnf install ansible -y
+```
 ```agsl
 pip3 install botocore boto3
 ```
